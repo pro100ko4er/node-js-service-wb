@@ -6,4 +6,4 @@ GOOGLE_SERVICE_ACCOUNT_EMAIL
 GOOGLE_PRIVATE_KEY
 TABLE_IDS через запятую, например table1,table2
 
-запуск docker compose up --build
+запуск docker compose up
