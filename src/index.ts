@@ -1,6 +1,5 @@
 import "dotenv/config"
 import knexInstance from "./db/index.js"
-import migrations from "./db/migrations.js"
 import createSchemes from "./db/schemes.js"
 import WbService from "./services/wb-service.js"
 import GoogleSheetService from "./services/google-sheet-service.js"
@@ -17,7 +16,7 @@ async function bootstrap() {
     await googleSheetsService.auth()
     await googleSheetsService.addHeaders()
     const syncTariffUseCase = new SyncTariffsUseCase(tariffBoxRepository, googleSheetsService, wbService)
-    cron.schedule('* * * * *', () => {
+    cron.schedule('0 * * * *', () => {
         syncTariffUseCase.execute()
     })
 }
