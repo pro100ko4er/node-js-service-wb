@@ -2,8 +2,6 @@ import knex from "knex"
 
 export interface ITariffsBoxSchema {
     id: number,
-    dtNextBox: string,
-    dtTillMax: string,
     boxDeliveryBase: string,
     boxDeliveryCoefExpr: string,
     boxDeliveryLiter: string,
@@ -14,17 +12,16 @@ export interface ITariffsBoxSchema {
     boxStorageCoefExpr: string,
     boxStorageLiter: string,
     geoName: string,
-    warehouseName: string
+    warehouseName: string,
+    createdAt: string,
+    updatedAt: string
 }
 
 export type ITariffsBoxSchemaWithoutId = Omit<ITariffsBoxSchema, 'id'> & {id?: number}
 
-
 async function createSchemes(knex: knex.Knex) {
     await knex.schema.createTableIfNotExists('tariffs_box', (table) => {
         table.increments('id').primary()
-        table.string('dtNextBox', 25)
-        table.string("dtTillMax", 25)
         table.string('boxDeliveryBase', 255),
         table.string('boxDeliveryCoefExpr', 255)
         table.string('boxDeliveryLiter', 255)
@@ -36,7 +33,9 @@ async function createSchemes(knex: knex.Knex) {
         table.string('boxStorageLiter', 255)
         table.string('geoName', 255)
         table.string('warehouseName', 255)
-        table.timestamps(true, true, true)
+        table.date('createdAt').defaultTo(knex.raw('CURRENT_DATE'))
+        table.timestamp('updatedAt').defaultTo(knex.fn.now());
+        table.unique(['warehouseName', 'createdAt']);
     })
 }
 

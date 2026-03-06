@@ -1,0 +1,25 @@
+import "dotenv/config";
+import knexInstance from "./db/index.js";
+import migrations from "./db/migrations.js";
+import createSchemes from "./db/schemes.js";
+import WbService from "./services/wb-service.js";
+import GoogleSheetService from "./services/google-sheet-service.js";
+import TariffsBoxRepository from "./repositories/tariffs-box.js";
+import SyncTariffsUseCase from "./usecases/sync-tariffs-usecase.js";
+import { getConfig } from "./config.js";
+import cron from 'node-cron';
+async function bootstrap() {
+    const appConfig = getConfig();
+    await createSchemes(knexInstance);
+    const tariffBoxRepository = new TariffsBoxRepository(knexInstance);
+    const wbService = new WbService(appConfig.WB_API_KEY);
+    const googleSheetsService = new GoogleSheetService(appConfig.GOOGLE_SERVICE_ACCOUNT_EMAIL, appConfig.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"), appConfig.TABLE_IDS.split(','), 'stocks_coefs');
+    await googleSheetsService.auth();
+    await googleSheetsService.addHeaders();
+    const syncTariffUseCase = new SyncTariffsUseCase(tariffBoxRepository, googleSheetsService, wbService);
+    cron.schedule('* * * * *', () => {
+        syncTariffUseCase.execute();
+    });
+}
+bootstrap();
+//# sourceMappingURL=index.js.map

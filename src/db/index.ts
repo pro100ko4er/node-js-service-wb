@@ -3,11 +3,11 @@ import knex from 'knex'
 const knexInstance = knex({
   client: "pg",
   connection: {
-    host: "127.0.0.1",
-    port: 5432,
-    user: "postgres",
-    password: "postgres",
-    database: "postgres",
+    host: process.env.POSTGRES_HOST || 'db',
+    port: Number(process.env.POSTGRES_PORT) || 5432,
+    user: process.env.POSTGRES_USER || 'postgres',
+    password: process.env.POSTGRES_PASSWORD || 'postgres',
+    database: process.env.POSTGRES_DB || 'postgres',
   },
   migrations: {
     directory: "./migrations",
