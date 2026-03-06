@@ -12,7 +12,7 @@ async function bootstrap() {
     await createSchemes(knexInstance)
     const tariffBoxRepository = new TariffsBoxRepository(knexInstance)
     const wbService = new WbService(appConfig.WB_API_KEY)
-    const googleSheetsService = new GoogleSheetService(appConfig.GOOGLE_SERVICE_ACCOUNT_EMAIL, appConfig.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"), appConfig.TABLE_IDS.split(','), 'stocks_coefs')
+    const googleSheetsService = new GoogleSheetService(appConfig.GOOGLE_SERVICE_ACCOUNT_EMAIL, appConfig.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"), appConfig.TABLE_IDS.split(','), appConfig.TARGET_SHEET)
     await googleSheetsService.auth()
     await googleSheetsService.addHeaders()
     const syncTariffUseCase = new SyncTariffsUseCase(tariffBoxRepository, googleSheetsService, wbService)

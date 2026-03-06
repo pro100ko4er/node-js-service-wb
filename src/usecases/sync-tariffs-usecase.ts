@@ -21,7 +21,7 @@ export default class SyncTariffsUseCase {
         } catch (error) {
             if(error instanceof Error) {
                 if(error.message === '429wb') {
-                    logger.error("Слишком много запросов")
+                    logger.error("Слишком много запросов WB")
                 }
                 logger.error(error.message)
              }

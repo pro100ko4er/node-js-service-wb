@@ -6,4 +6,6 @@ GOOGLE_SERVICE_ACCOUNT_EMAIL
 GOOGLE_PRIVATE_KEY
 TABLE_IDS через запятую, например table1,table2
 
+также в этих таблицах уже должен быть лист stocks_coefs
+
 запуск docker compose up
